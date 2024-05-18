@@ -12,4 +12,4 @@ documentation = "https://rcore-os.github.io/arceos/page_table/index.html"
 [dependencies]
 log = "0.4"
 memory_addr = { git = "ssh://git@github.com/shilei-massclouds/memory_addr" }
-page_table_entry = { git = "ssh://git@github.com/shilei-massclouds/page_table_entry" }
+page_table_entry = { git = "ssh://git@github.com/shilei-massclouds/page_table" }
