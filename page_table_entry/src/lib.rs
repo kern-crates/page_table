@@ -18,6 +18,7 @@ mod arch;
 
 use core::fmt::Debug;
 use memory_addr::PhysAddr;
+use axhal::mem::MemRegionFlags;
 
 pub use self::arch::*;
 
@@ -69,4 +70,26 @@ pub trait GenericPTE: Debug + Clone + Copy + Sync + Send + Sized {
     fn is_huge(&self) -> bool;
     /// Set this entry to zero.
     fn clear(&mut self);
+}
+
+impl From<MemRegionFlags> for MappingFlags {
+    fn from(f: MemRegionFlags) -> Self {
+        let mut ret = Self::empty();
+        if f.contains(MemRegionFlags::READ) {
+            ret |= Self::READ;
+        }
+        if f.contains(MemRegionFlags::WRITE) {
+            ret |= Self::WRITE;
+        }
+        if f.contains(MemRegionFlags::EXECUTE) {
+            ret |= Self::EXECUTE;
+        }
+        if f.contains(MemRegionFlags::DEVICE) {
+            ret |= Self::DEVICE;
+        }
+        if f.contains(MemRegionFlags::UNCACHED) {
+            ret |= Self::UNCACHED;
+        }
+        ret
+    }
 }

@@ -26,11 +26,13 @@ extern crate log;
 
 mod arch;
 mod bits64;
+pub mod paging;
 
 use memory_addr::{PhysAddr, VirtAddr};
 
 pub use self::arch::*;
 pub use self::bits64::PageTable64;
+use axhal::mem::{memory_regions, phys_to_virt};
 
 #[doc(no_inline)]
 pub use page_table_entry::{GenericPTE, MappingFlags};
@@ -119,5 +121,26 @@ impl From<PageSize> for usize {
     #[inline]
     fn from(size: PageSize) -> usize {
         size as usize
+    }
+}
+
+pub fn init() {
+    axconfig::init_once!();
+    info!("Initialize kernel page table...");
+
+    if axhal::cpu::_this_cpu_is_bsp() {
+        let mut kernel_page_table = paging::PageTable::try_new().unwrap();
+        for r in memory_regions() {
+            kernel_page_table.map_region(
+                phys_to_virt(r.paddr),
+                r.paddr,
+                r.size,
+                r.flags.into(),
+                true,
+            ).unwrap();
+        }
+        paging::setup_page_table_root(kernel_page_table);
+    } else {
+        paging::reuse_page_table_root();
     }
 }
