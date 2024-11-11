@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = [
+    "page_table",
+    "rt_page_table",
+]
+
+[profile.release]
+lto = true

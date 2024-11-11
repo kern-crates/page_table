@@ -1,0 +1,11 @@
+{
+  "name": "page_table",
+  "description": "PageTable management.",
+  "authors": [{
+    "name": "Shi Lei",
+    "email": "shi_lei@massclouds.com"
+  }],
+  "keywords": ["pagetable", "boot"],
+  "repo": "shilei-massclouds/page_table",
+  "doc_url": "https://github.com/shilei-massclouds/page_table/blob/main/README.md"
+}
